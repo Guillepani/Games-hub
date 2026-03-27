@@ -1,0 +1,102 @@
+.snake-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-block: 2rem 3rem;
+}
+
+.snake-scoreboard {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  padding: 1rem 1.25rem;
+}
+
+.snake-score,
+.snake-best-score {
+  margin: 0;
+  font-weight: 600;
+  color: var(--text-color, #2b2b2b);
+}
+
+.snake-status {
+  margin: 0;
+  font-weight: 600;
+  color: var(--accent-color, #9c7b45);
+}
+
+.snake-board-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.snake-board {
+  display: grid;
+  width: min(92vw, 520px);
+  aspect-ratio: 1 / 1;
+  background-color: #f4ead7;
+  border: 2px solid #d8c19a;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  touch-action: none;
+  user-select: none;
+}
+
+.snake-cell {
+  border: 1px solid rgba(156, 123, 69, 0.08);
+  background-color: #fffaf2;
+}
+
+.snake-head {
+  background-color: #9c7b45;
+}
+
+.snake-body {
+  background-color: #ccb189;
+}
+
+.snake-food {
+  background-color: #d97b54;
+  border-radius: 6px;
+}
+
+.snake-controls-info {
+  margin: 0;
+  color: #6d5b43;
+  font-size: 0.95rem;
+}
+
+.snake-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 600px) {
+  .snake-view {
+    gap: 1.25rem;
+  }
+
+  .snake-scoreboard {
+    gap: 0.75rem;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .snake-board {
+    width: min(94vw, 420px);
+  }
+
+  .snake-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .snake-buttons .btn {
+    width: 100%;
+  }
+}
