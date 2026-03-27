@@ -1,8 +1,11 @@
 import './style.css'
+import { Home } from './pages/Home/Home'
 
 const app = document.querySelector('#app')
 
-const title = document.createElement('h1')
-title.textContent = 'Games Hub'
+export const renderPage = (page) => {
+  app.innerHTML = ''
+  app.append(page)
+}
 
-app.append(title)
+renderPage(Home())

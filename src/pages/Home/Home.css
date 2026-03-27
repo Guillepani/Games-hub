@@ -1,0 +1,40 @@
+.home {
+  width: 100%;
+  min-height: 100vh;
+  padding: 2rem 1rem 4rem;
+}
+
+.home-intro {
+  max-width: 700px;
+  margin: 0 auto 2.5rem;
+  text-align: center;
+}
+
+.home-intro h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.home-intro p {
+  font-size: 1rem;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
+.games-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .home {
+    padding: 3rem 2rem 5rem;
+  }
+
+  .games-section {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
