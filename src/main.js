@@ -1,8 +1,8 @@
-id = 'mainbase'
 import './style.css'
 
 const app = document.querySelector('#app')
 
-app.innerHTML = `
-  <h1>Games Hub</h1>
-`
+const title = document.createElement('h1')
+title.textContent = 'Games Hub'
+
+app.append(title)
