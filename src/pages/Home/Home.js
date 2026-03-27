@@ -13,40 +13,43 @@ export const Home = () => {
 
   const header = Header()
 
+  const headerSubtitle = header.querySelector('p')
+  if (headerSubtitle) {
+    headerSubtitle.remove()
+  }
+
   const introSection = document.createElement('section')
   introSection.classList.add('home-intro', 'container')
+
+  const introBadge = document.createElement('span')
+  introBadge.classList.add('home-intro-badge')
+  introBadge.textContent = 'Experiencia arcade by Guillem Paniagua'
 
   const introTitle = document.createElement('h2')
   introTitle.textContent = 'Tres juegos, un solo hub'
 
   const introText = document.createElement('p')
   introText.textContent =
-    'Disfruta de una colección de juegos interactivos desarrollados con JavaScript vanilla. Entra, juega y trata de superar tu mejor puntuación.'
+    'Desafía tus habilidades para jugar y superar tu mejor puntuación.'
 
-  introSection.append(introTitle, introText)
+  introSection.append(introBadge, introTitle, introText)
 
   const gamesSection = document.createElement('section')
   gamesSection.classList.add('games-section', 'container')
+
+  const routes = {
+    tictactoe: TicTacToe,
+    snake: Snake,
+    towerbuilder: TowerBuilder
+  }
 
   for (const game of gamesData) {
     const card = GameCard(game)
     const button = card.querySelector('button')
 
-    if (game.id === 'tictactoe') {
+    if (button && routes[game.id]) {
       button.addEventListener('click', () => {
-        renderPage(TicTacToe())
-      })
-    }
-
-    if (game.id === 'snake') {
-      button.addEventListener('click', () => {
-        renderPage(Snake())
-      })
-    }
-
-    if (game.id === 'towerbuilder') {
-      button.addEventListener('click', () => {
-        renderPage(TowerBuilder())
+        renderPage(routes[game.id]())
       })
     }
 
