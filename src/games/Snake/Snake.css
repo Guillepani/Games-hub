@@ -1,73 +1,210 @@
+/* =========================
+   CONTENEDOR GENERAL
+========================= */
+
 .snake-view {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  padding-block: 2rem 3rem;
+  padding-block: 2.5rem 3.5rem;
 }
 
+/* fondo decorativo superior */
+.snake-view::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 166, 0, 0.18), transparent 30%),
+    radial-gradient(circle at 80% 15%, rgba(255, 90, 31, 0.14), transparent 28%),
+    radial-gradient(circle at 50% 80%, rgba(255, 218, 185, 0.2), transparent 36%);
+  filter: blur(18px);
+}
+
+/* hero header */
+.snake-view::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(900px, 95%);
+  height: 180px;
+  border-radius: 40px;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 200, 120, 0.25), transparent 60%),
+    linear-gradient(135deg, rgba(255,255,255,0.4), rgba(240,210,170,0.25));
+  filter: blur(10px);
+  z-index: -1;
+}
+
+/* =========================
+   HEADER (TÍTULO + TEXTO)
+========================= */
+
+.snake-view .game-title {
+  position: relative;
+  margin-top: 0.5rem;
+  font-size: clamp(2.5rem, 5vw, 4.2rem);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+
+  background: linear-gradient(135deg, #3a1f0f, #a05a2c, #ffb347);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow:
+    0 4px 12px rgba(160, 90, 44, 0.25),
+    0 8px 30px rgba(255, 179, 71, 0.2);
+}
+
+.snake-view .game-title::after {
+  content: 'SNAKE';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  z-index: -1;
+
+  color: rgba(255, 180, 80, 0.2);
+  filter: blur(12px);
+}
+
+.snake-view .game-description {
+  margin: 0 auto;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #6b4b35;
+  text-align: center;
+
+  background: rgba(255, 255, 255, 0.55);
+  padding: 0.6rem 1.2rem;
+  border-radius: 999px;
+
+  box-shadow:
+    0 8px 18px rgba(80, 50, 20, 0.08),
+    inset 0 1px 0 rgba(255,255,255,0.8);
+}
+
+/* =========================
+   SCOREBOARD
+========================= */
+
 .snake-scoreboard {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(180px, 240px));
   justify-content: center;
-  gap: 2rem;
-  flex-wrap: wrap;
-  padding: 1rem 1.25rem;
+  gap: 1rem;
+  padding: 1rem;
+
+  border-radius: 24px;
+  background:
+    linear-gradient(145deg, rgba(255, 250, 241, 0.92), rgba(244, 223, 191, 0.94));
+
+  box-shadow:
+    0 18px 38px rgba(93, 56, 24, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
 }
 
 .snake-score,
 .snake-best-score {
   margin: 0;
-  font-weight: 600;
-  color: var(--text-color, #2b2b2b);
+  padding: 1rem;
+
+  border-radius: 18px;
+  text-align: center;
+  font-weight: 800;
+
+  background: white;
+  box-shadow: 0 10px 20px rgba(83, 51, 24, 0.08);
 }
+
+/* =========================
+   MENSAJE
+========================= */
 
 .snake-status {
   margin: 0;
-  font-weight: 600;
-  color: var(--accent-color, #9c7b45);
+  text-align: center;
+  font-weight: 700;
+  color: #a75a1f;
 }
+
+/* =========================
+   TABLERO
+========================= */
 
 .snake-board-wrapper {
   display: flex;
   justify-content: center;
-  width: 100%;
 }
 
 .snake-board {
   display: grid;
-  width: min(92vw, 520px);
+  width: min(92vw, 560px);
   aspect-ratio: 1 / 1;
-  background-color: #f4ead7;
-  border: 2px solid #d8c19a;
-  border-radius: 18px;
+
+  padding: 0.7rem;
+  border-radius: 34px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+  background:
+    linear-gradient(145deg, #1e130c, #342015 45%, #4b2b18 100%);
+
+  box-shadow:
+    0 28px 60px rgba(61, 35, 14, 0.28),
+    inset 0 2px 0 rgba(255, 255, 255, 0.15);
+
   touch-action: none;
   user-select: none;
 }
 
 .snake-cell {
-  border: 1px solid rgba(156, 123, 69, 0.08);
-  background-color: #fffaf2;
+  border: 1px solid rgba(255, 220, 180, 0.05);
 }
 
+/* =========================
+   SERPIENTE
+========================= */
+
 .snake-head {
-  background-color: #9c7b45;
+  background: linear-gradient(135deg, #d8ff9d, #12b74c);
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(64, 255, 112, 0.8);
 }
 
 .snake-body {
-  background-color: #ccb189;
+  background: linear-gradient(135deg, #9dff83, #13a44a);
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(58, 229, 109, 0.4);
 }
+
+/* =========================
+   COMIDA
+========================= */
 
 .snake-food {
-  background-color: #d97b54;
-  border-radius: 6px;
+  background: radial-gradient(circle, #ffb347, #ff6a00);
+  border-radius: 50%;
+  animation: pulse 0.8s infinite alternate;
 }
 
-.snake-controls-info {
-  margin: 0;
-  color: #6d5b43;
-  font-size: 0.95rem;
+@keyframes pulse {
+  from {
+    transform: scale(0.7);
+  }
+  to {
+    transform: scale(0.9);
+  }
 }
+
+/* =========================
+   BOTONES
+========================= */
 
 .snake-buttons {
   display: flex;
@@ -76,24 +213,33 @@
   flex-wrap: wrap;
 }
 
-@media (max-width: 600px) {
-  .snake-view {
-    gap: 1.25rem;
-  }
+.snake-buttons .btn {
+  min-width: 180px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #3b2315, #d58c42);
+  color: white;
+  font-weight: 800;
+  box-shadow: 0 14px 24px rgba(103, 67, 31, 0.18);
+  transition: 0.2s;
+}
 
+.snake-buttons .btn:hover {
+  transform: translateY(-2px);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 700px) {
   .snake-scoreboard {
-    gap: 0.75rem;
-    flex-direction: column;
-    align-items: center;
+    grid-template-columns: 1fr;
   }
+}
 
-  .snake-board {
-    width: min(94vw, 420px);
-  }
-
+@media (max-width: 600px) {
   .snake-buttons {
     flex-direction: column;
-    align-items: stretch;
   }
 
   .snake-buttons .btn {
