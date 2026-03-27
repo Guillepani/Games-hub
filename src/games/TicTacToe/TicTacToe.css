@@ -6,8 +6,141 @@
 .game-view h2 {
   font-size: 2rem;
   margin-bottom: 1rem;
+  color: var(--text-main);
 }
 
-.game-view p {
+.game-view > p {
   color: var(--text-soft);
+  margin-bottom: 1.5rem;
+}
+
+.tic-tac-toe-score {
+  max-width: 560px;
+  margin: 0 auto 1.5rem;
+}
+
+.tic-tac-toe-score h3 {
+  margin-bottom: 1rem;
+  font-size: 1.15rem;
+  color: var(--text-main);
+}
+
+.tic-tac-toe-score__list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.tic-tac-toe-score__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1rem;
+  border-radius: var(--radius);
+  background-color: rgba(200, 169, 126, 0.12);
+}
+
+.tic-tac-toe-score__item span {
+  font-size: 0.95rem;
+  color: var(--text-soft);
+}
+
+.tic-tac-toe-score__item strong {
+  font-size: 1.5rem;
+  color: var(--text-main);
+}
+
+.game-result {
+  min-height: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  color: var(--accent-dark);
+}
+
+.tic-tac-toe-board {
+  width: min(100%, 360px);
+  margin: 0 auto 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.tic-tac-toe-cell {
+  aspect-ratio: 1 / 1;
+  border: none;
+  border-radius: var(--radius);
+  background-color: var(--bg-secondary);
+  box-shadow: var(--shadow);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--text-main);
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.tic-tac-toe-cell:hover {
+  transform: translateY(-2px);
+}
+
+.cell-x {
+  color: #8b5e3c;
+}
+
+.cell-o {
+  color: var(--accent-dark);
+}
+
+.cell-winning {
+  background-color: #efe2cf;
+  outline: 2px solid var(--accent);
+}
+
+.game-disabled .tic-tac-toe-cell {
+  cursor: default;
+}
+
+.game-disabled .tic-tac-toe-cell:hover {
+  transform: none;
+}
+
+.tic-tac-toe-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .game-view {
+    padding: 2.5rem 1rem 3rem;
+  }
+
+  .game-view h2 {
+    font-size: 1.75rem;
+  }
+
+  .tic-tac-toe-score__list {
+    grid-template-columns: 1fr;
+  }
+
+  .tic-tac-toe-board {
+    gap: 0.6rem;
+  }
+
+  .tic-tac-toe-cell {
+    font-size: 1.9rem;
+  }
+
+  .tic-tac-toe-controls {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tic-tac-toe-controls .btn {
+    width: 100%;
+    max-width: 280px;
+  }
 }
