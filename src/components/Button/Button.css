@@ -1,0 +1,39 @@
+.btn {
+  padding: 0.95rem 1.4rem;
+  border: none;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #6b3f1f, #d6954b);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 12px 24px rgba(107, 63, 31, 0.22);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 28px rgba(107, 63, 31, 0.28);
+  filter: brightness(1.04);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 18px rgba(107, 63, 31, 0.2);
+}
+
+.btn:focus-visible {
+  outline: 3px solid rgba(214, 149, 75, 0.35);
+  outline-offset: 3px;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
