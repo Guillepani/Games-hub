@@ -4,128 +4,60 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding-block: 2.5rem 3.5rem;
-}
-
-/* fondo decorativo superior */
-.snake-view::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  background:
-    radial-gradient(
-      circle at 20% 20%,
-      rgba(255, 166, 0, 0.18),
-      transparent 30%
-    ),
-    radial-gradient(
-      circle at 80% 15%,
-      rgba(255, 90, 31, 0.14),
-      transparent 28%
-    ),
-    radial-gradient(
-      circle at 50% 80%,
-      rgba(255, 218, 185, 0.2),
-      transparent 36%
-    );
-  filter: blur(18px);
-}
-
-/* hero header */
-.snake-view::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(900px, 95%);
-  height: 180px;
-  border-radius: 40px;
-  background:
-    radial-gradient(
-      circle at 50% 50%,
-      rgba(255, 200, 120, 0.25),
-      transparent 60%
-    ),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(240, 210, 170, 0.25));
-  filter: blur(10px);
-  z-index: -1;
+  gap: 0.75rem;
+  padding-block: 1.5rem 2rem;
+  min-height: 100vh;
+  background-color: var(--bg-main);
 }
 
 /* HEADER */
 
 .snake-view .game-title {
-  position: relative;
-  margin-top: 0.5rem;
-  font-size: clamp(2.5rem, 5vw, 4.2rem);
+  font-size: clamp(1.6rem, 4vw, 2.8rem);
   font-weight: 900;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   text-align: center;
-  background: linear-gradient(135deg, #3a1f0f, #a05a2c, #ffb347);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--accent-alt);
   text-shadow:
-    0 4px 12px rgba(160, 90, 44, 0.25),
-    0 8px 30px rgba(255, 179, 71, 0.2);
-}
-
-.snake-view .game-title::after {
-  content: 'SNAKE';
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 0;
-  z-index: -1;
-  color: rgba(255, 180, 80, 0.2);
-  filter: blur(12px);
+    0 0 20px rgba(0, 245, 255, 0.6),
+    0 0 40px rgba(0, 245, 255, 0.3);
 }
 
 .snake-view .game-description {
   margin: 0 auto;
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: #6b4b35;
+  font-size: 0.85rem;
+  color: var(--text-soft);
   text-align: center;
-  background: rgba(255, 255, 255, 0.55);
-  padding: 0.6rem 1.2rem;
-  border-radius: 999px;
-  box-shadow:
-    0 8px 18px rgba(80, 50, 20, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  letter-spacing: 0.04em;
 }
 
 /* SCOREBOARD */
 
 .snake-scoreboard {
   display: grid;
-  grid-template-columns: repeat(2, minmax(180px, 240px));
+  grid-template-columns: repeat(2, minmax(160px, 220px));
   justify-content: center;
-  gap: 1rem;
-  padding: 1rem;
-  border-radius: 24px;
-  background: linear-gradient(
-    145deg,
-    rgba(255, 250, 241, 0.92),
-    rgba(244, 223, 191, 0.94)
-  );
-  box-shadow:
-    0 18px 38px rgba(93, 56, 24, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
 }
 
 .snake-score,
 .snake-best-score {
   margin: 0;
-  padding: 1rem;
-  border-radius: 18px;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
   text-align: center;
-  font-weight: 800;
-  background: white;
-  box-shadow: 0 10px 20px rgba(83, 51, 24, 0.08);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--accent-alt);
+  text-shadow: var(--glow-cyan);
 }
 
 /* MENSAJE */
@@ -133,8 +65,10 @@
 .snake-status {
   margin: 0;
   text-align: center;
+  font-size: 0.82rem;
   font-weight: 700;
-  color: #a75a1f;
+  letter-spacing: 0.06em;
+  color: var(--accent);
 }
 
 /* TABLERO */
@@ -146,55 +80,68 @@
 
 .snake-board {
   display: grid;
-  width: min(92vw, 560px);
+  width: min(60vh, 92vw, 480px);
   aspect-ratio: 1 / 1;
-  padding: 0.7rem;
-  border-radius: 34px;
+  padding: 0.4rem;
+  border-radius: 12px;
   overflow: hidden;
-  background: linear-gradient(145deg, #1e130c, #342015 45%, #4b2b18 100%);
+  background: #050505;
+  border: 1px solid var(--accent-alt);
   box-shadow:
-    0 28px 60px rgba(61, 35, 14, 0.28),
-    inset 0 2px 0 rgba(255, 255, 255, 0.15);
+    0 0 24px rgba(0, 245, 255, 0.15),
+    inset 0 0 40px rgba(0, 0, 0, 0.8);
   touch-action: none;
   user-select: none;
 }
 
 .snake-cell {
-  border: 1px solid rgba(255, 220, 180, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 /* SERPIENTE */
 
 .snake-head {
-  background: linear-gradient(135deg, #d8ff9d, #12b74c);
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(64, 255, 112, 0.8);
+  background: var(--accent);
+  border-radius: 4px;
+  box-shadow: 0 0 12px rgba(57, 255, 20, 0.8);
 }
 
 .snake-body {
-  background: linear-gradient(135deg, #9dff83, #13a44a);
-  border-radius: 10px;
-  box-shadow: 0 0 12px rgba(58, 229, 109, 0.4);
+  background: rgba(57, 255, 20, 0.5);
+  border-radius: 3px;
+  box-shadow: 0 0 6px rgba(57, 255, 20, 0.3);
 }
 
 /* COMIDA */
 
 .snake-food {
-  background: radial-gradient(circle, #ffb347, #ff6a00);
+  background: var(--accent-pink);
   border-radius: 50%;
-  animation: pulse 0.8s infinite alternate;
+  box-shadow: 0 0 10px rgba(255, 0, 204, 0.7);
+  animation: pulse 0.7s infinite alternate;
 }
 
 @keyframes pulse {
   from {
-    transform: scale(0.7);
+    transform: scale(0.65);
   }
   to {
     transform: scale(0.9);
   }
 }
 
-/* BOTONES: SOLO LAYOUT */
+/* CONTROLES INFO */
+
+.snake-controls-info {
+  margin: 0 auto;
+  max-width: 480px;
+  font-size: 0.75rem;
+  color: var(--text-soft);
+  text-align: center;
+  letter-spacing: 0.03em;
+}
+
+/* BOTONES */
 
 .snake-buttons {
   display: flex;

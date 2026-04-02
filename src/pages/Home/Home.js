@@ -13,11 +13,6 @@ export const Home = () => {
 
   const header = Header()
 
-  const headerSubtitle = header.querySelector('p')
-  if (headerSubtitle) {
-    headerSubtitle.remove()
-  }
-
   const introSection = document.createElement('section')
   introSection.classList.add('home-intro', 'container')
 
@@ -30,7 +25,7 @@ export const Home = () => {
 
   const introText = document.createElement('p')
   introText.textContent =
-    'Desafía tus habilidades para jugar y superar tu mejor puntuación.'
+    'Desafía tus habilidades y supera tu mejor puntuación.'
 
   introSection.append(introBadge, introTitle, introText)
 

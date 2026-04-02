@@ -5,15 +5,21 @@
 }
 
 :root {
-  --bg-main: #f5f1e9;
-  --bg-secondary: #ffffff;
-  --text-main: #1a1a1a;
-  --text-soft: #555555;
-  --accent: #c8a97e;
-  --accent-dark: #a88d68;
+  --bg-main: #0d0d0d;
+  --bg-secondary: #1a1a1a;
+  --bg-card: #141414;
+  --text-main: #f0f0f0;
+  --text-soft: #888888;
+  --accent: #39ff14;
+  --accent-alt: #00f5ff;
+  --accent-pink: #ff00cc;
+  --border-color: rgba(57, 255, 20, 0.15);
   --radius: 12px;
   --max-width: 1200px;
-  --shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  --shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  --glow-green: 0 0 12px rgba(57, 255, 20, 0.4);
+  --glow-cyan: 0 0 12px rgba(0, 245, 255, 0.4);
+  --card-bg: #1a1a1a;
 }
 
 html {
@@ -22,7 +28,7 @@ html {
 
 body {
   min-height: 100vh;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Courier New', Courier, monospace;
   background-color: var(--bg-main);
   color: var(--text-main);
 }
@@ -56,7 +62,7 @@ button {
 .container {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 1.5rem;
 }
 
 .section {
@@ -68,24 +74,9 @@ button {
 }
 
 .card {
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-card);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
+  border: 1px solid var(--border-color);
   padding: 2rem;
-}
-
-.btn {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  background-color: var(--accent);
-  color: #ffffff;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn:hover {
-  background-color: var(--accent-dark);
-  transform: scale(1.05);
 }

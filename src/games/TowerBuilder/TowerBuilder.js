@@ -2,43 +2,58 @@ import './TowerBuilder.css'
 import { Button } from '../../components/Button/Button'
 import { renderPage } from '../../main'
 import { Home } from '../../pages/Home/Home'
-
-const STORAGE_KEY = 'gamesHubTowerBuilderBestScore'
+import {
+  createTowerState,
+  resetTowerState,
+  saveBestScore,
+  resetBestScore,
+  moveBlock,
+  placeBlock,
+  prepareNextBlock,
+  BLOCK_HEIGHT,
+  INITIAL_WIDTH
+} from './TowerBuilderLogic'
 
 export const TowerBuilder = () => {
   const section = document.createElement('section')
   section.classList.add('game-view', 'tower-builder', 'container')
 
-  let score = 0
-  let bestScore = Number(localStorage.getItem(STORAGE_KEY)) || 0
-
-  let currentWidth = 220
-  let currentLeft = 0
-  let currentDirection = 1
+  let state = createTowerState()
   let animationId = null
-  let gameOver = false
-  let started = false
 
-  const stack = []
+  // HEADER
+  const title = document.createElement('h2')
+  title.textContent = 'Tower Builder'
 
-  section.innerHTML = `
-    <h2>Tower Builder</h2>
-    <p>Detén cada bloque en el momento exacto para construir la torre más alta posible.</p>
-  `
+  const description = document.createElement('p')
+  description.textContent =
+    'Detén cada bloque en el momento exacto para construir la torre más alta posible.'
 
+  // SCOREBOARD
   const scoreboard = document.createElement('div')
   scoreboard.classList.add('tower-builder__scoreboard')
-  scoreboard.innerHTML = `
-    <div class="tower-builder__score-card">
-      <span>Puntuación</span>
-      <strong class="tower-builder__score">0</strong>
-    </div>
-    <div class="tower-builder__score-card">
-      <span>Récord</span>
-      <strong class="tower-builder__best">${bestScore}</strong>
-    </div>
-  `
 
+  const scoreCard = document.createElement('div')
+  scoreCard.classList.add('tower-builder__score-card')
+  const scoreLabel = document.createElement('span')
+  scoreLabel.textContent = 'Puntuación'
+  const scoreValue = document.createElement('strong')
+  scoreValue.classList.add('tower-builder__score')
+  scoreValue.textContent = '0'
+  scoreCard.append(scoreLabel, scoreValue)
+
+  const bestCard = document.createElement('div')
+  bestCard.classList.add('tower-builder__score-card')
+  const bestLabel = document.createElement('span')
+  bestLabel.textContent = 'Récord'
+  const bestValue = document.createElement('strong')
+  bestValue.classList.add('tower-builder__best')
+  bestValue.textContent = state.bestScore
+  bestCard.append(bestLabel, bestValue)
+
+  scoreboard.append(scoreCard, bestCard)
+
+  // GAME AREA
   const gameArea = document.createElement('div')
   gameArea.classList.add('tower-builder__area')
 
@@ -56,10 +71,14 @@ export const TowerBuilder = () => {
   )
   activeBlock.style.transition = 'transform 0.2s ease-out'
 
+  gameArea.append(sky, stackContainer, activeBlock)
+
+  // MENSAJE
   const message = document.createElement('p')
   message.classList.add('tower-builder__message')
-  message.textContent = 'Pulsa “Colocar bloque” para empezar.'
+  message.textContent = 'Pulsa "Colocar bloque" para empezar.'
 
+  // CONTROLES
   const controls = document.createElement('div')
   controls.classList.add('tower-builder__controls')
 
@@ -69,48 +88,30 @@ export const TowerBuilder = () => {
   const homeButton = Button('Volver al inicio')
 
   controls.append(placeButton, restartButton, resetScoreButton, homeButton)
-  gameArea.append(sky, stackContainer, activeBlock)
-  section.append(scoreboard, gameArea, message, controls)
+  section.append(title, description, scoreboard, gameArea, message, controls)
 
-  const scoreValue = scoreboard.querySelector('.tower-builder__score')
-  const bestValue = scoreboard.querySelector('.tower-builder__best')
-
-  const BLOCK_HEIGHT = 34
-  const SPEED = 2.6
+  // RENDER
+  const updateScore = () => {
+    scoreValue.textContent = state.score
+    bestValue.textContent = state.bestScore
+  }
 
   const updateCamera = () => {
     const areaHeight = gameArea.clientHeight
-    const towerHeight = stack.length * BLOCK_HEIGHT
-
-    // margen inferior visible (donde se juega)
+    const towerHeight = state.stack.length * BLOCK_HEIGHT
     const baseOffset = 120
-
     const offset = Math.max(0, towerHeight - (areaHeight - baseOffset))
-
     stackContainer.style.transform = `translateY(${offset}px)`
     activeBlock.style.transform = `translateY(${offset}px)`
   }
 
   const updateActiveBlock = () => {
-    activeBlock.style.width = `${currentWidth}px`
-    activeBlock.style.left = `${currentLeft}px`
-    activeBlock.style.bottom = `${stack.length * BLOCK_HEIGHT + BLOCK_HEIGHT + 16}px`
+    activeBlock.style.width = `${state.currentWidth}px`
+    activeBlock.style.left = `${state.currentLeft}px`
+    activeBlock.style.bottom = `${state.stack.length * BLOCK_HEIGHT + BLOCK_HEIGHT + 16}px`
     activeBlock.style.zIndex = '10'
     activeBlock.style.opacity = '1'
     updateCamera()
-  }
-
-  const updateScore = () => {
-    scoreValue.textContent = score
-    bestValue.textContent = bestScore
-  }
-
-  const saveBestScore = () => {
-    if (score > bestScore) {
-      bestScore = score
-      localStorage.setItem(STORAGE_KEY, bestScore)
-      bestValue.textContent = bestScore
-    }
   }
 
   const createPlacedBlock = (width, left, level) => {
@@ -124,11 +125,14 @@ export const TowerBuilder = () => {
   }
 
   const clearPlacedBlocks = () => {
-    stackContainer.innerHTML = ''
+    while (stackContainer.firstChild) {
+      stackContainer.removeChild(stackContainer.firstChild)
+    }
     stackContainer.style.transform = 'translateY(0)'
     activeBlock.style.transform = 'translateY(0)'
   }
 
+  // ANIMACIÓN
   const stopAnimation = () => {
     if (animationId) {
       cancelAnimationFrame(animationId)
@@ -136,33 +140,12 @@ export const TowerBuilder = () => {
     }
   }
 
-  const endGame = () => {
-    gameOver = true
-    stopAnimation()
-    saveBestScore()
-    message.textContent = `Game over. Tu torre llegó a ${score} bloques.`
-  }
-
   const startAnimation = () => {
     stopAnimation()
 
     const animate = () => {
-      if (gameOver) return
-
-      const areaWidth = gameArea.clientWidth
-
-      currentLeft += SPEED * currentDirection
-
-      if (currentLeft <= 0) {
-        currentLeft = 0
-        currentDirection = 1
-      }
-
-      if (currentLeft + currentWidth >= areaWidth) {
-        currentLeft = areaWidth - currentWidth
-        currentDirection = -1
-      }
-
+      if (state.gameOver) return
+      moveBlock(state, gameArea.clientWidth)
       updateActiveBlock()
       animationId = requestAnimationFrame(animate)
     }
@@ -170,108 +153,88 @@ export const TowerBuilder = () => {
     animationId = requestAnimationFrame(animate)
   }
 
-  const startFirstBlock = () => {
-    currentWidth = 220
-    currentLeft = 0
-    currentDirection = 1
-    started = true
-    message.textContent = '¡Ahora sí! Para la pieza en el mejor momento.'
-    updateActiveBlock()
-    startAnimation()
-  }
-
-  const prepareNextBlock = (baseBlock) => {
-    currentWidth = baseBlock.width
-    currentLeft = 0
-    currentDirection = 1
-    updateActiveBlock()
-  }
-
+  // ACCIONES
   const handlePlaceBlock = () => {
-    if (gameOver) return
+    if (state.gameOver) return
 
-    if (!started) {
-      startFirstBlock()
+    if (!state.started) {
+      state.started = true
+      state.currentWidth = INITIAL_WIDTH
+      state.currentLeft = 0
+      state.currentDirection = 1
+      message.textContent = '¡Ahora sí! Para la pieza en el mejor momento.'
+      updateActiveBlock()
+      startAnimation()
       return
     }
 
     stopAnimation()
 
-    if (stack.length === 0) {
-      stack.push({ width: currentWidth, left: currentLeft })
-      createPlacedBlock(currentWidth, currentLeft, 0)
-      score = 1
+    const result = placeBlock(state)
+
+    if (result.status === 'gameover') {
+      activeBlock.style.opacity = '0.35'
+      saveBestScore(state)
+      updateScore()
+      message.textContent = `Game over. Tu torre llegó a ${state.score} bloques.`
+      return
+    }
+
+    if (result.status === 'first') {
+      createPlacedBlock(state.currentWidth, state.currentLeft, 0)
       updateScore()
       message.textContent = 'Buen comienzo. Sigue apilando.'
-      prepareNextBlock(stack[stack.length - 1])
+      prepareNextBlock(state)
       startAnimation()
       return
     }
 
-    const previousBlock = stack[stack.length - 1]
-    const previousLeft = previousBlock.left
-    const previousRight = previousBlock.left + previousBlock.width
-    const currentRight = currentLeft + currentWidth
-
-    const overlapLeft = Math.max(previousLeft, currentLeft)
-    const overlapRight = Math.min(previousRight, currentRight)
-    const overlapWidth = overlapRight - overlapLeft
-
-    if (overlapWidth <= 0) {
-      activeBlock.style.opacity = '0.35'
-      endGame()
-      return
-    }
-
-    currentWidth = overlapWidth
-    currentLeft = overlapLeft
-
-    stack.push({ width: currentWidth, left: currentLeft })
-    createPlacedBlock(currentWidth, currentLeft, stack.length - 1)
-
-    score++
+    createPlacedBlock(
+      state.currentWidth,
+      state.currentLeft,
+      state.stack.length - 1
+    )
     updateScore()
 
-    if (currentWidth < 60) {
+    if (result.precision === 'low') {
       message.textContent =
         'Va fina la cosa... cuidado, que ya casi no queda margen.'
-    } else if (currentWidth < 120) {
+    } else if (result.precision === 'mid') {
       message.textContent = 'Muy bien. Cada vez exige más precisión.'
     } else {
       message.textContent = 'Buen corte. Sigue subiendo.'
     }
 
-    prepareNextBlock(stack[stack.length - 1])
+    prepareNextBlock(state)
     startAnimation()
   }
 
-  const resetGame = () => {
+  const handleRestart = () => {
     stopAnimation()
-    score = 0
-    currentWidth = 220
-    currentLeft = 0
-    currentDirection = 1
-    gameOver = false
-    started = false
-    stack.length = 0
-
+    resetTowerState(state)
     clearPlacedBlocks()
     activeBlock.style.opacity = '1'
     updateScore()
     updateActiveBlock()
-    message.textContent = 'Pulsa “Colocar bloque” para empezar.'
+    message.textContent = 'Pulsa "Colocar bloque" para empezar.'
   }
 
-  const resetBestScore = () => {
-    bestScore = 0
-    localStorage.removeItem(STORAGE_KEY)
+  const handleResetBest = () => {
+    resetBestScore(state)
     updateScore()
   }
 
+  const cleanup = () => {
+    stopAnimation()
+  }
+
   placeButton.addEventListener('click', handlePlaceBlock)
-  restartButton.addEventListener('click', resetGame)
-  resetScoreButton.addEventListener('click', resetBestScore)
-  homeButton.addEventListener('click', () => renderPage(Home()))
+  restartButton.addEventListener('click', handleRestart)
+  resetScoreButton.addEventListener('click', handleResetBest)
+  homeButton.addEventListener('click', () => {
+    cleanup()
+    renderPage(Home())
+  })
 
   updateScore()
   updateActiveBlock()
